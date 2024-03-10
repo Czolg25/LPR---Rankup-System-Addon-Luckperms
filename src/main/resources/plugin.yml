@@ -1,0 +1,13 @@
+name: LuckPermsRankup
+version: 1.0
+main: pl.epicserwer.czolg.addons.luckperm.Main
+author: Czolg1 - mythicalShop
+depend:
+  - LuckPerms
+commands:
+  luckpermsrankup:
+    aliases:
+      - lpr
+    permission: lpr.basic
+  rankup:
+    description: rankup command

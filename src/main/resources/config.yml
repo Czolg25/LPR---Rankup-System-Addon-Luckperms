@@ -1,0 +1,54 @@
+# Luckperms Addon by Czolg1
+# Support: https://dc.mythicalshop.pl
+# Versions: 1.7-1.20
+
+general:
+  command: "rankup"
+  aliases:
+    - "/awans"
+    - "/nadaj"
+  base-permission: "lpr.rankup"
+# this is base permission
+# lpr.rankup.[luckpermsgroup]
+# for example base permission is lpr.rankup, for /rankup <nick> administrator permission is lpr.rankup.administrator
+# If u don't want any aliases u can set this:
+# aliases:
+# - ""
+#
+# If u want change command set:
+# command: "/yourcommand"
+#
+messages:
+  NO_PERMISSION: "&cYou do not have access to this command"
+  SUCCESS_ADMIN: "&aPlayer &d%player% has been promoted to %rank%"
+  SUCCESS_PLAYER: "&aYou have been promoted to %rank% by %admin_rank% &c%admin_nickname%"
+  CORRECT_USAGE: "&cUsage: /rankup [player] [path]"
+  RELOAD_SUCCESS: "&aReloaded"
+  RELOAD_FAILED: "&cReload Failed! Check console and configuration"
+  FAILED_PATH: "&cFailed path"
+  PLAYER_NOT_EXISTS: "&c%player% does not exist"
+  NEXT_GROUP_NOT_EXISTS: "&cNext group does not exist"
+
+paths:
+  default:
+    - default
+    - vip
+    - vip+
+  administration:
+    - support
+    - admin
+    - owner
+  mod:
+    - mod
+# Using "/rankup [nick] default" promotes you to a higher general rank according to the server configuration.
+# Using "/rankup [nick] administration" promotes you to a higher administrative rank according to the server configuration.
+
+# Placeholders:
+# %player% - player username
+# %admin_nickname% - username of the administrator who promoted the user
+# %admin_rank% - the prefix of the administrator who promoted the user
+# %rank% - the rank prefix the player receives
+
+#Permissions:
+# lpr.rankup.[luckpermsgroup]
+# lpr.reload

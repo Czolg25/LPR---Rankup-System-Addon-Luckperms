@@ -1,6 +1,6 @@
 package pl.epicserwer.czolg.addons.luckperm.objects.tracks;
 
-import pl.epicserwer.czolg.addons.luckperm.objects.NameObject;
+import pl.epicserwer.czolg.addons.luckperm.objects.Name;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TracksObject {
     private final List<String> trackNames;
-    private final HashMap<NameObject, TrackObject> trackObjectHashMap;
+    private final HashMap<Name, TrackObject> trackObjectHashMap;
 
     public TracksObject(final List<TrackObject> trackObjectList){
         this.trackNames = new ArrayList<>();
@@ -24,7 +24,7 @@ public class TracksObject {
         return trackNames;
     }
 
-    public TrackObject getTrackObject(final NameObject name){
+    public TrackObject getTrackObject(final Name name){
         return this.trackObjectHashMap.get(name);
     }
 

@@ -7,18 +7,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.epicserwer.czolg.addons.luckperm.Main;
 import pl.epicserwer.czolg.addons.luckperm.data.ConfigData;
+import pl.epicserwer.czolg.addons.luckperm.data.MessageType;
 import pl.epicserwer.czolg.addons.luckperm.data.builders.ConfigBuilder;
-import pl.epicserwer.czolg.addons.luckperm.objects.NameObject;
+import pl.epicserwer.czolg.addons.luckperm.objects.Name;
 import pl.epicserwer.czolg.addons.luckperm.objects.tracks.TrackObject;
 import pl.epicserwer.czolg.addons.luckperm.objects.tracks.TracksObject;
-import pl.epicserwer.czolg.addons.luckperm.wrappers.LuckPermWrapper;
+import pl.epicserwer.czolg.addons.luckperm.wrappers.LuckPermRepository;
 
 public class BasicCommand implements CommandExecutor {
     private final Main plugin;
-    private final LuckPermWrapper luckPermWrapper;
+    private final LuckPermRepository luckPermWrapper;
     private final ConfigData configData;
 
-    public BasicCommand(final Main plugin,final LuckPermWrapper luckPermWrapper,final ConfigData configData) {
+    public BasicCommand(final Main plugin, final LuckPermRepository luckPermWrapper, final ConfigData configData) {
         this.plugin = plugin;
         this.luckPermWrapper = luckPermWrapper;
         this.configData = configData;
@@ -26,67 +27,67 @@ public class BasicCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-        final NameObject senderName = new NameObject(commandSender.getName());
+        final Name senderName = new Name(commandSender.getName());
 
         if(command.getName().equalsIgnoreCase(this.configData.getBasicCommand().getCommandName().toString())){
             if(args.length >= 2){
                 final TracksObject tracksObject = this.configData.getTracksObject();
 
-                final NameObject trackName = new NameObject(args[1]);
-                final NameObject receiverName = new NameObject(args[0]);
+                final Name trackName = new Name(args[1]);
+                final Name receiverName = new Name(args[0]);
 
                 if(!this.hasPermission(commandSender,trackName)){
-                    commandSender.sendMessage(this.configData.getMessagesData().getNoPermissionMessage().
-                            getMessage(receiverName,senderName,this.getSenderRankName(commandSender),new NameObject()));
+                    commandSender.sendMessage(this.configData.getMessagesData().getMessage(MessageType.NO_PERMISSION).
+                            getMessage(receiverName,senderName,this.getSenderRankName(commandSender),new Name()));
                     return true;
                 }
 
-                final NameObject receiverGroupName = this.luckPermWrapper.getRank(receiverName);
+                final Name receiverGroupName = this.luckPermWrapper.getRank(receiverName);
                 if(receiverGroupName == null) {
-                    commandSender.sendMessage(this.configData.getMessagesData().getNotPlayerExistsMessage().getMessage(receiverName,
-                            senderName,new NameObject(), new NameObject()));
+                    commandSender.sendMessage(this.configData.getMessagesData().getMessage(MessageType.PLAYER_NOT_EXISTS).getMessage(receiverName,
+                            senderName,new Name(), new Name()));
                     return true;
                 }
 
                 final TrackObject trackObject = tracksObject.getTrackObject(trackName);
                 if(trackObject == null) {
-                    commandSender.sendMessage(this.configData.getMessagesData().getFailedPathMessage().getMessage(new NameObject(),
-                            new NameObject(),new NameObject(), new NameObject()));
+                    commandSender.sendMessage(this.configData.getMessagesData().getMessage(MessageType.FAILED_PATH).getMessage(new Name(),
+                            new Name(),new Name(), new Name()));
                     return true;
                 }
 
-                final NameObject nextGroupName = trackObject.getNextGroup(receiverGroupName);
+                final Name nextGroupName = trackObject.getNextGroup(receiverGroupName);
                 if (nextGroupName == null) {
-                    commandSender.sendMessage(this.configData.getMessagesData().getGroupNotExistsMessage().getMessage(receiverName,
-                            senderName,this.getSenderRankName(commandSender),new NameObject()));
+                    commandSender.sendMessage(this.configData.getMessagesData().getMessage(MessageType.NEXT_GROUP_NOT_EXISTS).getMessage(receiverName,
+                            senderName,this.getSenderRankName(commandSender),new Name()));
                     return true;
                 }
 
                 this.luckPermWrapper.setRank(receiverName,nextGroupName);
 
-                commandSender.sendMessage(this.configData.getMessagesData().getSuccessAdminMessage().getMessage(receiverName,senderName,
+                commandSender.sendMessage(this.configData.getMessagesData().getMessage(MessageType.SUCCESS_ADMIN).getMessage(receiverName,senderName,
                         this.getSenderRankName(commandSender),nextGroupName));
 
                 final Player receiverPlayer = Bukkit.getPlayer(receiverName.toString());
                 if(receiverPlayer != null && receiverPlayer.isOnline())
-                    receiverPlayer.sendMessage(this.configData.getMessagesData().getSuccessPlayerMessage().getMessage(receiverName,senderName,
+                    receiverPlayer.sendMessage(this.configData.getMessagesData().getMessage(MessageType.SUCCESS_PLAYER).getMessage(receiverName,senderName,
                             this.getSenderRankName(commandSender),nextGroupName));
                 return true;
             }
 
-            commandSender.sendMessage(this.configData.getMessagesData().getCorrectUsageMessage().getMessage(new NameObject(),
-                    senderName,this.getSenderRankName(commandSender), new NameObject()));
+            commandSender.sendMessage(this.configData.getMessagesData().getMessage(MessageType.CORRECT_USAGE).getMessage(new Name(),
+                    senderName,this.getSenderRankName(commandSender), new Name()));
             return true;
         }
         if(command.getName().equalsIgnoreCase("luckpermsrankup")){
             try {
                 this.plugin.reloadConfig();
                 this.configData.reload(new ConfigBuilder(this.plugin.getConfig()).build());
-                commandSender.sendMessage(this.configData.getMessagesData().getSuccessReloadMessage().getMessage(new NameObject(),senderName,
-                        this.getSenderRankName(commandSender),new NameObject()));
+                commandSender.sendMessage(this.configData.getMessagesData().getMessage(MessageType.RELOAD_SUCCESS).getMessage(new Name(),senderName,
+                        this.getSenderRankName(commandSender),new Name()));
             } catch (Exception e) {
-                commandSender.sendMessage(this.configData.getMessagesData().getFailedReloadMessage().getMessage(new NameObject(),senderName,
-                        this.getSenderRankName(commandSender),new NameObject()));
+                commandSender.sendMessage(this.configData.getMessagesData().getMessage(MessageType.RELOAD_FAILED).getMessage(new Name(),senderName,
+                        this.getSenderRankName(commandSender),new Name()));
                 e.printStackTrace();
             }
         }
@@ -94,17 +95,17 @@ public class BasicCommand implements CommandExecutor {
         return false;
     }
 
-    private NameObject getSenderRankName(final CommandSender commandSender){
+    private Name getSenderRankName(final CommandSender commandSender){
         if(commandSender instanceof Player){
             final Player player = (Player)commandSender;
-            return this.luckPermWrapper.getRank(new NameObject(player.getName()));
+            return this.luckPermWrapper.getRank(new Name(player.getName()));
         }
 
-        return new NameObject("Console");
+        return new Name("Console");
     }
 
-    private boolean hasPermission(final CommandSender commandSender, final NameObject trackName){
+    private boolean hasPermission(final CommandSender commandSender, final Name trackName){
         return commandSender.hasPermission(this.configData.getBasicCommand().getPermission(trackName).toString()) ||
-                commandSender.hasPermission(this.configData.getBasicCommand().getPermission(new NameObject("*")).toString());
+                commandSender.hasPermission(this.configData.getBasicCommand().getPermission(new Name("*")).toString());
     }
 }

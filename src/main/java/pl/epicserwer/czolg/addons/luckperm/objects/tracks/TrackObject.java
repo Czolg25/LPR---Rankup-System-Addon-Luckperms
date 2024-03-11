@@ -1,16 +1,16 @@
 package pl.epicserwer.czolg.addons.luckperm.objects.tracks;
 
-import pl.epicserwer.czolg.addons.luckperm.objects.NameObject;
+import pl.epicserwer.czolg.addons.luckperm.objects.Name;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class TrackObject {
-    private final NameObject trackName;
-    private final HashMap<NameObject,Integer> groupsHashMap;
-    private final List<NameObject> groupNameList;
+    private final Name trackName;
+    private final HashMap<Name,Integer> groupsHashMap;
+    private final List<Name> groupNameList;
 
-    public TrackObject(final NameObject trackName,final List<NameObject> groupNameList) {
+    public TrackObject(final Name trackName, final List<Name> groupNameList) {
         if(trackName == null) throw new IllegalArgumentException("trackName cannot be null");
         if(groupNameList == null) throw new IllegalArgumentException("group list cannot be null");
         if(groupNameList.isEmpty()) throw new IllegalArgumentException("group name list cannot be empty");
@@ -20,16 +20,16 @@ public class TrackObject {
         this.groupsHashMap = new HashMap<>();
 
         for (int i = 0; i < groupNameList.size(); i++) {
-            final NameObject groupName = groupNameList.get(i);
+            final Name groupName = groupNameList.get(i);
             this.groupsHashMap.put(groupName,i);
         }
     }
 
-    public NameObject getTrackName() {
+    public Name getTrackName() {
         return trackName;
     }
 
-    public NameObject getNextGroup(final NameObject groupName) {
+    public Name getNextGroup(final Name groupName) {
         if(this.groupNameList.size() == 1) return this.groupNameList.get(0);
 
         if(!this.groupsHashMap.containsKey(groupName)) return null;

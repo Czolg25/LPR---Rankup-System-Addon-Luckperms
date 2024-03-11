@@ -9,7 +9,7 @@ import pl.epicserwer.czolg.addons.luckperm.commands.BasicCommand;
 import pl.epicserwer.czolg.addons.luckperm.commands.tab.BasicCommandTabComplete;
 import pl.epicserwer.czolg.addons.luckperm.data.ConfigData;
 import pl.epicserwer.czolg.addons.luckperm.data.builders.ConfigBuilder;
-import pl.epicserwer.czolg.addons.luckperm.wrappers.LuckPermWrapper;
+import pl.epicserwer.czolg.addons.luckperm.wrappers.LuckPermRepository;
 
 import java.util.logging.Logger;
 
@@ -17,7 +17,7 @@ public class Main extends JavaPlugin {
     private Logger logger;
     private ConfigData configData;
     private ConfigBuilder configBuilder;
-    private LuckPermWrapper luckPermWrapper;
+    private LuckPermRepository luckPermWrapper;
 
     @Override
     public void onEnable() {
@@ -34,7 +34,7 @@ public class Main extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.luckPermWrapper = new LuckPermWrapper(this.getLuckPerms());
+        this.luckPermWrapper = new LuckPermRepository(this.getLuckPerms());
 
         this.setupCommands();
     }

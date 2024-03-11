@@ -1,32 +1,32 @@
 package pl.epicserwer.czolg.addons.luckperm.objects.commands;
 
-import pl.epicserwer.czolg.addons.luckperm.objects.NameObject;
+import pl.epicserwer.czolg.addons.luckperm.objects.Name;
 
 import java.util.List;
 
 public class CommandObject {
-    private final NameObject commandName;
-    private final List<NameObject> aliases;
-    private final NameObject permission;
+    private final Name commandName;
+    private final List<Name> aliases;
+    private final Name permission;
 
-    public CommandObject(NameObject commandName, List<NameObject> aliases, NameObject permission) {
-        if(commandName.toString().startsWith("/")) this.commandName = new NameObject(commandName.toString().replaceFirst("/", ""));
+    public CommandObject(Name commandName, List<Name> aliases, Name permission) {
+        if(commandName.toString().startsWith("/")) this.commandName = new Name(commandName.toString().replaceFirst("/", ""));
         else this.commandName = commandName;
 
         this.aliases = aliases;
         this.permission = permission;
     }
 
-    public NameObject getCommandName() {
+    public Name getCommandName() {
         return commandName;
     }
 
-    public List<NameObject> getAliases() {
+    public List<Name> getAliases() {
         return aliases;
     }
 
-    public NameObject getPermission(final NameObject trackName) {
-        return new NameObject(permission+"."+trackName);
+    public Name getPermission(final Name trackName) {
+        return new Name(permission+"."+trackName);
     }
 
     @Override
